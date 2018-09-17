@@ -1,6 +1,9 @@
+import Form from './form.js';
+
 const DOM = function (config, template_path) {
     this._config = config;
     this.Template = new this.Template(template_path)
+    this.Form = null;
 }
 
 DOM.prototype.Template = function (template_path) {
@@ -30,6 +33,7 @@ DOM.prototype.Template.prototype.fetch = path => {
         }
     });
 }
+
 DOM.prototype.Template.prototype.build = function () {
     return this.fetch(this.template_path)
         .then(template_response => template_response.text())
@@ -44,13 +48,16 @@ DOM.prototype.Template.prototype.build = function () {
 
 DOM.prototype.build = function () {
     return new Promise((resolve) => {
-        this.Template.build().then(() => resolve(this))
+        this.Template.build().then(() => {
+            this.Form = new Form(this._config, this.Template)
+            resolve(this)
+        })
     })
 }
 
 DOM.prototype.appendInside = function(refElement){
     let queryElementRef = document.querySelector(refElement)
-    if(!queryElementRef) return false;
+    if(!queryElementRef) return new Error(`${refElement} is not valid!`);
     // 
     // build form element here and append inside element
     // queryElementRef.appendChild()
