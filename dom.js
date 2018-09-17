@@ -5,25 +5,17 @@ const DOM = function (config, template_path) {
 
 DOM.prototype.Template = function (template_path) {
     this.handle = new EventTarget();
-    this.fetch(template_path)
-        .then(template_response => template_response.text())
-        .then(template_html => {
-            this.handle.dispatchEvent(new CustomEvent('template-request-end'), {
-                template_html
-            })
-            this._dom = this.parse(template_html);
-        }).catch(error => {
-            return new Error('Template path is not valid.');
-        })
+    this.template_path = template_path;
 }
 
-DOM.prototype.Template.prototype.parse = function(templateHTML){ // parse html to form dom.
+DOM.prototype.Template.prototype.parse = function (templateHTML) { // parse html to form dom.
     this.handle.dispatchEvent(new CustomEvent('template-will-parse', {
     }))
-    this.selfHTMLDOM = new DOMParser().parseFromString(templateHTML, "text/html");
+   let dom_parsed =  new DOMParser().parseFromString(templateHTML, "text/html");
     this.handle.dispatchEvent(new CustomEvent('template-was-parsed', {
         parsed: true
     }))
+    return dom_parsed
 }
 
 DOM.prototype.Template.prototype.get = key => { // search inside self dom object
@@ -38,14 +30,27 @@ DOM.prototype.Template.prototype.fetch = path => {
         }
     });
 }
+DOM.prototype.Template.prototype.build = function () {
+    return this.fetch(this.template_path)
+        .then(template_response => template_response.text())
+        .then(template_html => {
+            this.document = this.parse(template_html);
+            this.handle.dispatchEvent(new CustomEvent('template-request-end'))
+            return new Promise((resolve) => {
+                resolve(this)
+            })
+        })
+}
 
-DOM.prototype.build = () => {
-    return ''
+DOM.prototype.build = function () {
+    return new Promise((resolve) => {
+        this.Template.build().then(() => resolve(this))
+    })
 }
 
 
 let dom = new DOM({}, 'main.template.html');
 
-// dom.Template.handle.addEventListener('template-request-end', function(event){
-//     console.log(event)
-// })
+dom.build().then(self => {
+    console.log(self)
+})
