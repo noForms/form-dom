@@ -48,9 +48,13 @@ DOM.prototype.build = function () {
     })
 }
 
+DOM.prototype.appendInside = function(refElement){
+    let queryElementRef = document.querySelector(refElement)
+    if(!queryElementRef) return false;
+    // 
+    // build form element here and append inside element
+    // queryElementRef.appendChild()
+}
 
-let dom = new DOM({}, 'main.template.html');
 
-dom.build().then(self => {
-    console.log(self)
-})
+export default DOM;
