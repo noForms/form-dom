@@ -13,8 +13,6 @@ Template.prototype.parse = function (template_html) { // parse html to form dom.
     return dom_parsed
 }
 
-Template.prototype.get = key => { // search inside self dom object
-}
 
 Template.prototype.fetch = path => {
     return fetch(path, {
@@ -37,5 +35,16 @@ Template.prototype.build = function () {
         })
 }
 
+Template.prototype.fetchType = function(node_type){
+    let search_template = this.document.querySelector(`[no-template="${node_type}"]`);
+    if(!search_template) 
+        throw new Error('node.type not exist in template file.');
+
+    return search_template.cloneNode(true);
+}
+
+Template.prototype.putAttr = function(node, attr){
+
+}
 
 export default Template;

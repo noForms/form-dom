@@ -24,13 +24,4 @@ DOM.prototype.appendInside = function(ref_element){
     // queryElementRef.appendChild()
 }
 
-Form.prototype.fetchTemplate = function(type_template){
-    let search_template = this._template.document.querySelector(`[no-template="${type_template}"]`);
-    if(!search_template) 
-        throw new Error('type_template not exist in template file.');
-
-    return search_template.cloneNode(true);
-}
-
-
 export default DOM;
