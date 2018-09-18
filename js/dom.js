@@ -1,66 +1,35 @@
 import Form from './form.js';
+import Template from './Template.js';
 
 const DOM = function (config, template_path) {
     this._config = config;
-    this.Template = new this.Template(template_path)
+    this.Template = new Template(template_path)
     this.Form = null;
-}
-
-DOM.prototype.Template = function (template_path) {
-    this.handle = new EventTarget();
-    this.template_path = template_path;
-}
-
-DOM.prototype.Template.prototype.parse = function (templateHTML) { // parse html to form dom.
-    this.handle.dispatchEvent(new CustomEvent('template-will-parse', {
-    }))
-   let dom_parsed =  new DOMParser().parseFromString(templateHTML, "text/html");
-    this.handle.dispatchEvent(new CustomEvent('template-was-parsed', {
-        parsed: true
-    }))
-    return dom_parsed
-}
-
-DOM.prototype.Template.prototype.get = key => { // search inside self dom object
-
-}
-
-DOM.prototype.Template.prototype.fetch = path => {
-    return fetch(path, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'html/text'
-        }
-    });
-}
-
-DOM.prototype.Template.prototype.build = function () {
-    return this.fetch(this.template_path)
-        .then(template_response => template_response.text())
-        .then(template_html => {
-            this.document = this.parse(template_html);
-            this.handle.dispatchEvent(new CustomEvent('template-request-end'))
-            return new Promise((resolve) => {
-                resolve(this)
-            })
-        })
 }
 
 DOM.prototype.build = function () {
     return new Promise((resolve) => {
         this.Template.build().then(() => {
-            this.Form = new Form(this._config, this.Template)
+            this.Form = new Form(this._config, this.Template, this.Template.document)
             resolve(this)
         })
     })
 }
 
-DOM.prototype.appendInside = function(refElement){
-    let queryElementRef = document.querySelector(refElement)
-    if(!queryElementRef) return new Error(`${refElement} is not valid!`);
+DOM.prototype.appendInside = function(ref_element){
+    let query_element_ref = document.fetchTemplate(ref_element)
+    if(!query_element_ref) throw new Error(`${ref_element} is not valid!`);
     // 
     // build form element here and append inside element
     // queryElementRef.appendChild()
+}
+
+Form.prototype.fetchTemplate = function(type_template){
+    let search_template = this._template.document.querySelector(`[no-template="${type_template}"]`);
+    if(!search_template) 
+        throw new Error('type_template not exist in template file.');
+
+    return search_template.cloneNode(true);
 }
 
 
