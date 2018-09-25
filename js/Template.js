@@ -43,10 +43,6 @@ Template.prototype.fetchType = function(node_type){
     return search_template.cloneNode(true);
 }
 
-Template.prototype.putProps = function(node, props){
-    for(let p in props) node[p] = props[p]
-    
-    return node
-}
+
 
 export default Template;

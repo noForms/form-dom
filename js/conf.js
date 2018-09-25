@@ -5,32 +5,34 @@ const _config = new Config({
             colSize: 10,
             children: [
                 {
-                    type: 'input',
+                    type: 'calc',
                     fid: 'name',
+                    title: 'Handle',
                     handle: {
                         input: {
-                            click: (event) => {
-                                console.log(event)
-                            },
-                            input: (event) => {
-                                console.log(event)
-                            }
+                            input: console.log
                         },
                         btn: {
                             click: console.log
                         }
                     },
                     props: {
-                        required: true
+                        input: {
+                            required: true,
+                        }
+                    },
+                    style: {
+                        dis: {
+                            width: '50px'
+                        },
+                        btn: {
+                            background: '#999',
+                            color:'#fff',
+                            border: 'none',
+                            borderRadius: '5px',
+                            padding: '3px 20px'
+                        }
                     }
-                }
-            ]
-        },
-        {
-            title: "Crédito Impostos",
-            fields: [
-                {
-
                 }
             ]
         }
