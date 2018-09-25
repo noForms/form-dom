@@ -1,8 +1,7 @@
 <div no-template="input">
-    <button type="button">1</button>
-    <input  no-event-change="onInput" />
-    <input type="datetime" no-event-change="onInput" />
+    <input type="datetime" no-handle="input" />
+    <button no-handle="btn" type="button">search</button>
 </div>
 
-<button no-template="button" no-event-click="onClick">My Button</button>
+<button no-click no-template="button" no-event-click="onClick">My Button</button>
 

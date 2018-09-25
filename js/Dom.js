@@ -30,6 +30,7 @@ DOM.prototype.renderForm = function(_config = this._config){
         divR = (row.children || []).reduce((r, f) => {
             let temp_el = this.Template.fetchType(f.type)
             temp_el = this.Template.putProps(temp_el, f.props)
+            temp_el = this.handle(temp_el, f.handle)
             r.appendChild(temp_el)
             return r 
         }, divR)
@@ -38,8 +39,16 @@ DOM.prototype.renderForm = function(_config = this._config){
     }, document.createElement('form'))
 }
 
-DOM.prototype.handle = function(nodeConfig){
+DOM.prototype.handle = function(node, handles){
     // set up events
+    for(let targets in handles){
+        let target = node.querySelector(`[no-handle="${targets}"]`)
+        console.dir(target)
+        for(let event in handles[targets]){
+            target[`on${event}`] = handles[targets][event]
+        }
+    }
+    return node;
 }
 
 

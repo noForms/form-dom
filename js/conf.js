@@ -7,26 +7,30 @@ const _config = new Config({
                 {
                     type: 'input',
                     fid: 'name',
-                    on: {
-                        click: event => {
-                            console.log(event)
+                    handle: {
+                        input: {
+                            click: (event) => {
+                                console.log(event)
+                            },
+                            input: (event) => {
+                                console.log(event)
+                            }
                         },
+                        btn: {
+                            click: console.log
+                        }
                     },
                     props: {
                         required: true
                     }
-                },
+                }
+            ]
+        },
+        {
+            title: "Crédito Impostos",
+            fields: [
                 {
-                    type: 'input',
-                    fid: 'name',
-                    on: {
-                        click: event => {
-                            console.log(event)
-                        },
-                    },
-                    props: {
-                        required: true
-                    }
+
                 }
             ]
         }
